@@ -7,7 +7,7 @@ function App() {
         <div class="col-md">
           <h2>To Do List</h2>
           <ul class="list-group">
-            <li class="list-group-item">
+            <li class="list-group-item active">
               <img src="./check.png"/><span class="todo-title done">Go to birthday party</span>
             </li>
             <li class="list-group-item">
