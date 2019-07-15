@@ -22,6 +22,17 @@ export class ToDo extends Component {
     this.setState({ items: items });
 
   }
+  /*
+  -              <li className="list-group-item">
+-                <span className="todo-title to-do">Buy groceries</span>
+-              </li>
+-              <li className="list-group-item">
+-                <span className="todo-title to-do">Buy casket</span></li>
+-              <li className="list-group-item">
+-                <span className="todo-title to-do">Pay electric bill</span></li>
+-              <li className="list-group-item">
+-                <span className="todo-title to-do">Set mouse trap</span></li> 
+*/
   render() {
     if (this.state.items.length > 0) {
       console.log(this.state.items);
@@ -31,21 +42,11 @@ export class ToDo extends Component {
             <div className="col-md">
               <h2>To Do List</h2>
               <ul className="list-group">
-
-                <li className="list-group-item active">{this.state.items[0].title}</li>
-
-                {/* <li className="list-group-item active">
-                <img alt="check" src="./check.png"/><span className="todo-title done">Go to birthday party</span>
-              </li>
-              <li className="list-group-item">
-                <span className="todo-title to-do">Buy groceries</span>
-              </li>
-              <li className="list-group-item">
-                <span className="todo-title to-do">Buy casket</span></li>
-              <li className="list-group-item">
-                <span className="todo-title to-do">Pay electric bill</span></li>
-              <li className="list-group-item">
-                <span className="todo-title to-do">Set mouse trap</span></li> */}
+                {this.state.items.length > 0 ? 
+                  this.state.items.map(item => {
+                    return <li className="list-group-item">{item.title}</li>
+                  })
+                  : <p>No items</p>}
               </ul>
             </div>
           </div>
