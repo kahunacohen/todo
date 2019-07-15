@@ -14,7 +14,7 @@ export class ToDo extends Component {
   }
 
   async getItems() {
-    return [{ title: "Get a casket", done: true }];
+    return [{ id: 1, title: "Get a casket", done: true }];
   }
   async componentDidMount() {
     const items = await this.getItems();
@@ -44,7 +44,7 @@ export class ToDo extends Component {
               <ul className="list-group">
                 {this.state.items.length > 0 ? 
                   this.state.items.map(item => {
-                    return <li className="list-group-item">{item.title}</li>
+                    return <li key={item.id.toString()} className="list-group-item">{item.title}{item.id}</li>
                   })
                   : <p>No items</p>}
               </ul>
