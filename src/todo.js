@@ -22,17 +22,6 @@ export class ToDo extends Component {
     this.setState({ items: items });
 
   }
-  /*
-  -              <li className="list-group-item">
--                <span className="todo-title to-do">Buy groceries</span>
--              </li>
--              <li className="list-group-item">
--                <span className="todo-title to-do">Buy casket</span></li>
--              <li className="list-group-item">
--                <span className="todo-title to-do">Pay electric bill</span></li>
--              <li className="list-group-item">
--                <span className="todo-title to-do">Set mouse trap</span></li> 
-*/
   render() {
     if (this.state.items.length > 0) {
       console.log(this.state.items);
@@ -40,7 +29,16 @@ export class ToDo extends Component {
       return (
         <div className="container">
           <div className="row">
-            <div className="col-md">
+          <div className="col col-md-3">
+              <h2>Actions</h2>
+              <ul id="actions">
+                <li><button type="button" class="btn-sm btn-info">Add</button></li>
+                <li><button type="button" class="btn-sm btn-success">Mark Done</button></li>
+                <li><button type="button" class="btn-sm btn-secondary">Mark Undone</button></li>
+                <li><button type="button" class="btn-sm btn-danger">Delete</button></li>
+              </ul>
+            </div>
+            <div className="col col-md-9">
               <h2>To Do List</h2>
               <ul className="list-group form-check">
                 {this.state.items.length > 0 ?
