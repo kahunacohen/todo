@@ -9,6 +9,7 @@ export class ToDo extends Component {
   constructor(props) {
     super(props);
     this.addItem = this.addItem.bind(this);
+    this.handleAddItem = this.handleAddItem.bind(this);
     this.state = {
       items: []
     }
@@ -18,18 +19,19 @@ export class ToDo extends Component {
     return JSON.parse(await rp.get(`${this.API_URL}/items`));
   }
   async addItem(title) {
-    await rp.post({url:`${this.API_URL}/items`, body: {title: 'foo'}, json: true});
+    await rp.post({url:`${this.API_URL}/items`, body: {title: title}, json: true});
     this.setState({items: await this.getItems()});
+  }
+  handleAddItem() {
+    this.addItem(document.getElementById('add-title').value);
   }
   async componentDidMount() {
     const items = await this.getItems();
-    console.log(items);
     this.setState({ items: items });
 
   }
   render() {
     if (this.state.items.length > 0) {
-      console.log(this.state.items);
       const titleClasses = ['todo-title'];
       return (
         <div className="container">
@@ -37,7 +39,7 @@ export class ToDo extends Component {
           <div className="col col-md-3">
               <h2>Actions</h2>
               <ul id="actions">
-                <li><button type="button" className="btn-sm btn-info" onClick={this.addItem}>Add</button></li>
+                <li><input type="text" id="add-title" /><button type="button" className="btn-sm btn-info" onClick={this.handleAddItem}>Add</button></li>
                 <li><button type="button" className="btn-sm btn-success">Mark Done</button></li>
                 <li><button type="button" className="btn-sm btn-secondary">Mark Undone</button></li>
                 <li><button type="button" className="btn-sm btn-danger">Delete</button></li>
