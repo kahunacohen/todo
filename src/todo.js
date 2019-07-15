@@ -8,6 +8,7 @@ export class ToDo extends Component {
 
   constructor(props) {
     super(props);
+    this.addItem = this.addItem.bind(this);
     this.state = {
       items: []
     }
@@ -15,6 +16,10 @@ export class ToDo extends Component {
 
   async getItems() {
     return JSON.parse(await rp.get(`${this.API_URL}/items`));
+  }
+  async addItem(title) {
+    await rp.post({url:`${this.API_URL}/items`, body: {title: 'foo'}, json: true});
+    this.setState({items: await this.getItems()});
   }
   async componentDidMount() {
     const items = await this.getItems();
@@ -32,10 +37,10 @@ export class ToDo extends Component {
           <div className="col col-md-3">
               <h2>Actions</h2>
               <ul id="actions">
-                <li><button type="button" class="btn-sm btn-info">Add</button></li>
-                <li><button type="button" class="btn-sm btn-success">Mark Done</button></li>
-                <li><button type="button" class="btn-sm btn-secondary">Mark Undone</button></li>
-                <li><button type="button" class="btn-sm btn-danger">Delete</button></li>
+                <li><button type="button" className="btn-sm btn-info" onClick={this.addItem}>Add</button></li>
+                <li><button type="button" className="btn-sm btn-success">Mark Done</button></li>
+                <li><button type="button" className="btn-sm btn-secondary">Mark Undone</button></li>
+                <li><button type="button" className="btn-sm btn-danger">Delete</button></li>
               </ul>
             </div>
             <div className="col col-md-9">
@@ -46,7 +51,7 @@ export class ToDo extends Component {
                     let doneBadge;
                     if (item.done) {
                       titleClasses.push('done');
-                      doneBadge = <span class="badge badge-success">Done</span>;
+                      doneBadge = <span className="badge badge-success">Done</span>;
                     } else { 
                       titleClasses.push('to-do'); 
                       doneBadge = null;
