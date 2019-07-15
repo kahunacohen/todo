@@ -6,12 +6,11 @@
       "done": true
     },
     {
-      "id": 2,
-      "title": "By a casket",
-      "done": false
+      "title": "Arrange for flowers",
+      "id": 2
     },
     {
-      "title": "Pay the IRS",
+      "title": "Take Chewy out",
       "id": 3
     }
   ],
