@@ -1,0 +1,9 @@
+.list-group-item {
+  padding-left: .75rem;
+}
+.done {
+  margin-left: 10px;
+}
+.to-do {
+  margin-left: 30px;
+}
