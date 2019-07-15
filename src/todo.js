@@ -42,20 +42,18 @@ export class ToDo extends Component {
           <div className="row">
             <div className="col-md">
               <h2>To Do List</h2>
-              <ul className="list-group">
+              <ul className="list-group form-check">
                 {this.state.items.length > 0 ?
                   this.state.items.map(item => {
-                    let checkImg;
+                    let doneBadge;
                     if (item.done) {
                       titleClasses.push('done');
-                      checkImg = <img height="20" width="20" src="./check.png"/>;
+                      doneBadge = <span class="badge badge-success">Done</span>;
                     } else { 
                       titleClasses.push('to-do'); 
-                      checkImg = null;
+                      doneBadge = null;
                     }
-
-                    let li = <li key={item.id.toString()} className="list-group-item">{checkImg }<span className={titleClasses.join(' ')}>{item.title}</span></li>;
-                    return li;
+                    return <li key={item.id.toString()} className="list-group-item"><input className="form-check-input" type="checkbox"/><span className={titleClasses.join(' ')}>{item.title}</span>{doneBadge }</li>;
                   })
                   : <p>No items</p>}
               </ul>
