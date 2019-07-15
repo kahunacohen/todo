@@ -36,21 +36,27 @@ export class ToDo extends Component {
   render() {
     if (this.state.items.length > 0) {
       console.log(this.state.items);
-      let listClasses = ['list-group-item'];
+      const titleClasses = ['todo-title'];
       return (
         <div className="container">
           <div className="row">
             <div className="col-md">
               <h2>To Do List</h2>
               <ul className="list-group">
-                {this.state.items.length > 0 ? 
+                {this.state.items.length > 0 ?
                   this.state.items.map(item => {
-                  let li = <li key={item.id.toString()} className={listClasses.join(' ')}><span className="todo-title">{item.title}</span></li>;
+                    let checkImg;
                     if (item.done) {
-                      li = <li key={item.id.toString()} className={listClasses.join(' ')}><img height="20" width="20" src="./check.png"/><span className="todo-title">{item.title}</span></li>;
+                      titleClasses.push('done');
+                      checkImg = <img height="20" width="20" src="./check.png"/>;
+                    } else { 
+                      titleClasses.push('to-do'); 
+                      checkImg = null;
                     }
+
+                    let li = <li key={item.id.toString()} className="list-group-item">{checkImg }<span className={titleClasses.join(' ')}>{item.title}</span></li>;
                     return li;
-                })
+                  })
                   : <p>No items</p>}
               </ul>
             </div>
