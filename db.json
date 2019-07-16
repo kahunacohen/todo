@@ -1,25 +1,3 @@
 {
-  "items": [
-    {
-      "title": "Go to store",
-      "id": 1,
-      "done": true
-    },
-    {
-      "title": "Do laundry",
-      "id": 2
-    },
-    {
-      "title": "Buy books",
-      "id": 3
-    },
-    {
-      "title": "Buy food",
-      "id": 4
-    },
-    {
-      "title": "foo",
-      "id": 5
-    }
-  ]
+  "items": []
 }

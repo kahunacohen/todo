@@ -8,16 +8,21 @@ export class ToDo extends Component {
 
   constructor(props) {
     super(props);
-    this.actOnCheckboxes = this.setItems.bind(this);
+    this.addItemInput = React.createRef();
+    this.itemCheckboxes = [];
+    this.state = {
+      items: []
+    }
+    this.setItemCheckboxesRef = this.setItemCheckboxesRef.bind(this);
+    this.setItems = this.setItems.bind(this);
     this.handleAddItem = this.handleAddItem.bind(this);
     this.handleDeleteItem = this.handleDeleteItem.bind(this);
     this.handleMarkDone = this.handleMarkDone.bind(this);
     this.handleMarkUndone = this.handleMarkUndone.bind(this);
-    this.state = {
-      items: []
-    }
   }
-
+  setItemCheckboxesRef(el) {
+    this.itemCheckboxes.push(el);
+  }
   /**
    * Acts on all checked checkboxes.
    * @param {Function} cb - Callback function which takes the item ID as a parameter. 
@@ -25,8 +30,8 @@ export class ToDo extends Component {
    */
   setItems(cb) {
     let ret = [];
-    document.querySelectorAll('input[type=checkbox]').forEach(checkbox => {
-      if (checkbox.checked) {
+    this.itemCheckboxes.forEach(checkbox => {
+      if (checkbox && checkbox.checked) {
         cb.call(this, checkbox.dataset.key);
         checkbox.checked = false;
         ret.push(parseInt(checkbox.dataset.key));
@@ -39,6 +44,7 @@ export class ToDo extends Component {
    * Gets the list of TODO items.
    */
   async getItems() {
+    console.log(this.itemCheckboxes)
     return JSON.parse(await rp.get(`${this.API_URL}/items`));
   }
   async addItem(title) {
@@ -48,7 +54,7 @@ export class ToDo extends Component {
     }
   }
   async handleAddItem() {
-    const addInp = document.getElementById('add-title');
+    const addInp = this.addItemInput.current;
     await this.addItem(addInp.value);
     addInp.value = '';
   }
@@ -80,7 +86,6 @@ export class ToDo extends Component {
   async componentDidMount() {
     const items = await this.getItems();
     this.setState({ items: items });
-
   }
   render() {
     const titleClasses = ['todo-title'];
@@ -91,7 +96,7 @@ export class ToDo extends Component {
             <h2>Actions</h2>
             <ul id="actions">
               <li>
-                <input type="text" id="add-title" />
+                <input ref={this.addItemInput} type="text" />
                 <button type="button" className="btn-sm btn-info" onClick={this.handleAddItem}>Add</button>
               </li>
               <li>
@@ -118,7 +123,10 @@ export class ToDo extends Component {
                     titleClasses.push('to-do');
                     doneBadge = null;
                   }
-                  return <li key={item.id} className="list-group-item"><input data-key={item.id} className="form-check-input" type="checkbox" /><span className={titleClasses.join(' ')}>{item.title}</span>{doneBadge}</li>;
+                  return <li key={item.id} className="list-group-item">
+                          <input ref={this.setItemCheckboxesRef} data-key={item.id} className="form-check-input" type="checkbox" />
+                          <span className={titleClasses.join(' ')}>{item.title}</span>{doneBadge}
+                        </li>;
                 })
                 : <div className="alert alert-warning" role="alert">No items yet...</div>}
             </ul>
