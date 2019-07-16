@@ -11,6 +11,7 @@ export class ToDo extends Component {
     this.handleAddItem = this.handleAddItem.bind(this);
     this.handleDeleteItem = this.handleDeleteItem.bind(this);
     this.handleMarkDone = this.handleMarkDone.bind(this);
+    this.handleMarkUndone = this.handleMarkUndone.bind(this);
     this.state = {
       items: []
     }
@@ -24,12 +25,12 @@ export class ToDo extends Component {
       this.setState({ items: await this.getItems() });
     }
   }
+  handleAddItem() {
+    this.addItem(document.getElementById('add-title').value);
+  }
   async deleteItem(id) {
     await rp.delete(`${this.API_URL}/items/${id}`);
     this.setState({ items: await this.getItems() });
-  }
-  handleAddItem() {
-    this.addItem(document.getElementById('add-title').value);
   }
   handleDeleteItem(e) {
     document.querySelectorAll('input[type=checkbox]').forEach(el => {
@@ -45,9 +46,24 @@ export class ToDo extends Component {
     }
   }
   handleMarkDone() {
-    document.querySelectorAll('input[type=checkbox]').forEach(el => {
+    document.querySelectorAll('input[type=checkbox]').forEach(async el => {
       if (el.checked) {
-        this.markDone(el.dataset.key);
+        await this.markDone(el.dataset.key);
+        el.checked = false;
+      }
+    });
+  }
+  async markUndone(id) {
+    if (id) {
+      await rp.patch({ url: `${this.API_URL}/items/${id}`, body: { done: false }, json: true });
+      this.setState({ items: await this.getItems() });
+    }
+  }
+  handleMarkUndone() {
+    document.querySelectorAll('input[type=checkbox]').forEach(async el => {
+      if (el.checked) {
+        await this.markUndone(el.dataset.key);
+        el.checked = false;
       }
     });
   }
@@ -57,7 +73,6 @@ export class ToDo extends Component {
 
   }
   render() {
-    this.markDone(2);
     if (this.state.items.length > 0) {
       const titleClasses = ['todo-title'];
       return (
@@ -68,7 +83,7 @@ export class ToDo extends Component {
               <ul id="actions">
                 <li><input type="text" id="add-title" /><button type="button" className="btn-sm btn-info" onClick={this.handleAddItem}>Add</button></li>
                 <li><button type="button" className="btn-sm btn-success" onClick={this.handleMarkDone}>Mark Done</button></li>
-                <li><button type="button" className="btn-sm btn-secondary">Mark Undone</button></li>
+                <li><button type="button" className="btn-sm btn-secondary" onClick={this.handleMarkUndone}>Mark Undone</button></li>
                 <li><button type="button" className="btn-sm btn-danger" onClick={this.handleDeleteItem}>Delete</button></li>
               </ul>
             </div>
