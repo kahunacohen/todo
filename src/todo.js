@@ -48,9 +48,9 @@ export class ToDo extends Component {
     }
   }
   async handleAddItem() {
-    await this.addItem(document.getElementById('add-title').value);
-    document.querySelector('#add-title').value = '';
-
+    const addInp = document.getElementById('add-title');
+    await this.addItem(addInp.value);
+    addInp.value = '';
   }
   async deleteItem(id) {
     await rp.delete(`${this.API_URL}/items/${id}`);
