@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-
 import rp from 'request-promise-native'
+
+import Actions from './actions';
 
 
 export class ToDo extends Component {
@@ -8,7 +9,8 @@ export class ToDo extends Component {
 
   constructor(props) {
     super(props);
-    this.addItemInput = React.createRef();
+    this.addItemInput = null;
+    this.setAddInput = this.setAddInput.bind(this);
     this.itemCheckboxes = [];
     this.state = {
       items: []
@@ -20,9 +22,13 @@ export class ToDo extends Component {
     this.handleMarkDone = this.handleMarkDone.bind(this);
     this.handleMarkUndone = this.handleMarkUndone.bind(this);
   }
+  setAddInput(el) {
+    this.addItemInput = el;
+  }
   setItemCheckboxesRef(el) {
     this.itemCheckboxes.push(el);
   }
+
   /**
    * Acts on all checked checkboxes.
    * @param {Function} cb - Callback function which takes the item ID as a parameter. 
@@ -44,7 +50,6 @@ export class ToDo extends Component {
    * Gets the list of TODO items.
    */
   async getItems() {
-    console.log(this.itemCheckboxes)
     return JSON.parse(await rp.get(`${this.API_URL}/items`));
   }
   async addItem(title) {
@@ -54,7 +59,7 @@ export class ToDo extends Component {
     }
   }
   async handleAddItem() {
-    const addInp = this.addItemInput.current;
+    const addInp = this.addItemInput;
     await this.addItem(addInp.value);
     addInp.value = '';
   }
@@ -93,22 +98,13 @@ export class ToDo extends Component {
       <div className="container">
         <div className="row">
           <div className="col col-md-3">
-            <h2>Actions</h2>
-            <ul id="actions">
-              <li>
-                <input ref={this.addItemInput} type="text" />
-                <button type="button" className="btn-sm btn-info" onClick={this.handleAddItem}>Add</button>
-              </li>
-              <li>
-                <button type="button" className="btn-sm btn-success" onClick={this.handleMarkDone}>Mark Done</button>
-              </li>
-              <li>
-                <button type="button" className="btn-sm btn-secondary" onClick={this.handleMarkUndone}>Mark Undone</button>
-              </li>
-              <li>
-                <button type="button" className="btn-sm btn-danger" onClick={this.handleDeleteItem}>Delete</button>
-              </li>
-            </ul>
+            <Actions
+              setAddInput={this.setAddInput}
+              handleAddItem={this.handleAddItem}
+              handleMarkDone={this.handleMarkDone}
+              handleMarkUndone={this.handleMarkUndone}
+              handleDeleteItem={this.handleDeleteItem}
+            />
           </div>
           <div className="col col-md-9">
             <h2>To Do List</h2>
