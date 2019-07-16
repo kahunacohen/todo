@@ -1,14 +1,21 @@
 {
   "items": [
     {
+      "title": "Go to store",
       "id": 1,
-      "title": "Go to birthday party",
       "done": true
     },
     {
+      "title": "Do laundry",
+      "id": 2
+    },
+    {
+      "title": "Buy books",
+      "id": 3
+    },
+    {
       "title": "Buy food",
-      "id": 2,
-      "done": true
+      "id": 4
     }
   ]
 }

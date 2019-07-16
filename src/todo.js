@@ -47,8 +47,10 @@ export class ToDo extends Component {
       this.setState({ items: await this.getItems() });
     }
   }
-  handleAddItem() {
-    this.addItem(document.getElementById('add-title').value);
+  async handleAddItem() {
+    await this.addItem(document.getElementById('add-title').value);
+    document.querySelector('#add-title').value = '';
+
   }
   async deleteItem(id) {
     await rp.delete(`${this.API_URL}/items/${id}`);
@@ -81,43 +83,40 @@ export class ToDo extends Component {
 
   }
   render() {
-    if (this.state.items.length > 0) {
-      const titleClasses = ['todo-title'];
-      return (
-        <div className="container">
-          <div className="row">
-            <div className="col col-md-3">
-              <h2>Actions</h2>
-              <ul id="actions">
-                <li><input type="text" id="add-title" /><button type="button" className="btn-sm btn-info" onClick={this.handleAddItem}>Add</button></li>
-                <li><button type="button" className="btn-sm btn-success" onClick={this.handleMarkDone}>Mark Done</button></li>
-                <li><button type="button" className="btn-sm btn-secondary" onClick={this.handleMarkUndone}>Mark Undone</button></li>
-                <li><button type="button" className="btn-sm btn-danger" onClick={this.handleDeleteItem}>Delete</button></li>
-              </ul>
-            </div>
-            <div className="col col-md-9">
-              <h2>To Do List</h2>
-              <ul className="list-group form-check">
-                {this.state.items.length > 0 ?
-                  this.state.items.map(item => {
-                    let doneBadge;
-                    if (item.done) {
-                      titleClasses.push('done');
-                      doneBadge = <span className="badge badge-success">Done</span>;
-                    } else {
-                      titleClasses.push('to-do');
-                      doneBadge = null;
-                    }
-                    return <li key={item.id} className="list-group-item"><input data-key={item.id} className="form-check-input" type="checkbox" /><span className={titleClasses.join(' ')}>{item.title}</span>{doneBadge}</li>;
-                  })
-                  : <p>No items</p>}
-              </ul>
-            </div>
+    const titleClasses = ['todo-title'];
+    return (
+      <div className="container">
+        <div className="row">
+          <div className="col col-md-3">
+            <h2>Actions</h2>
+            <ul id="actions">
+              <li><input type="text" id="add-title" /><button type="button" className="btn-sm btn-info" onClick={this.handleAddItem}>Add</button></li>
+              <li><button type="button" className="btn-sm btn-success" onClick={this.handleMarkDone}>Mark Done</button></li>
+              <li><button type="button" className="btn-sm btn-secondary" onClick={this.handleMarkUndone}>Mark Undone</button></li>
+              <li><button type="button" className="btn-sm btn-danger" onClick={this.handleDeleteItem}>Delete</button></li>
+            </ul>
+          </div>
+          <div className="col col-md-9">
+            <h2>To Do List</h2>
+            <ul className="list-group form-check">
+              {this.state.items.length > 0 ?
+                this.state.items.map(item => {
+                  let doneBadge;
+                  if (item.done) {
+                    titleClasses.push('done');
+                    doneBadge = <span className="badge badge-success">Done</span>;
+                  } else {
+                    titleClasses.push('to-do');
+                    doneBadge = null;
+                  }
+                  return <li key={item.id} className="list-group-item"><input data-key={item.id} className="form-check-input" type="checkbox" /><span className={titleClasses.join(' ')}>{item.title}</span>{doneBadge}</li>;
+                })
+                : <div className="alert alert-warning" role="alert">No items yet...</div>}
+            </ul>
           </div>
         </div>
-      );
-    } else {
-      return null;
-    }
+      </div>
+    );
+
   }
 }
