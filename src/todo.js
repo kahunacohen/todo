@@ -8,6 +8,7 @@ export class ToDo extends Component {
 
   constructor(props) {
     super(props);
+    this.actOnCheckboxes = this.setItems.bind(this);
     this.handleAddItem = this.handleAddItem.bind(this);
     this.handleDeleteItem = this.handleDeleteItem.bind(this);
     this.handleMarkDone = this.handleMarkDone.bind(this);
@@ -16,6 +17,27 @@ export class ToDo extends Component {
       items: []
     }
   }
+
+  /**
+   * Acts on all checked checkboxes.
+   * @param {Function} cb - Callback function which takes the item ID as a parameter. 
+   * @returns {Array} - An array of item IDs acted upon.
+   */
+  setItems(cb) {
+    let ret = [];
+    document.querySelectorAll('input[type=checkbox]').forEach(checkbox => {
+      if (checkbox.checked) {
+        cb.call(this, checkbox.dataset.key);
+        checkbox.checked = false;
+        ret.push(parseInt(checkbox.dataset.key));
+      }
+    });
+    return ret;
+  }
+
+  /**
+   * Gets the list of TODO items.
+   */
   async getItems() {
     return JSON.parse(await rp.get(`${this.API_URL}/items`));
   }
@@ -33,11 +55,7 @@ export class ToDo extends Component {
     this.setState({ items: await this.getItems() });
   }
   handleDeleteItem(e) {
-    document.querySelectorAll('input[type=checkbox]').forEach(el => {
-      if (el.checked) {
-        this.deleteItem(el.dataset.key)
-      }
-    });
+    this.setItems(this.deleteItem);
   }
   async markDone(id) {
     if (id) {
@@ -46,12 +64,7 @@ export class ToDo extends Component {
     }
   }
   handleMarkDone() {
-    document.querySelectorAll('input[type=checkbox]').forEach(async el => {
-      if (el.checked) {
-        await this.markDone(el.dataset.key);
-        el.checked = false;
-      }
-    });
+    this.setItems(this.markDone);
   }
   async markUndone(id) {
     if (id) {
@@ -60,12 +73,7 @@ export class ToDo extends Component {
     }
   }
   handleMarkUndone() {
-    document.querySelectorAll('input[type=checkbox]').forEach(async el => {
-      if (el.checked) {
-        await this.markUndone(el.dataset.key);
-        el.checked = false;
-      }
-    });
+    this.setItems(this.markUndone);
   }
   async componentDidMount() {
     const items = await this.getItems();

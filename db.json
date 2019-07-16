@@ -6,14 +6,9 @@
       "done": true
     },
     {
-      "title": "Arrange for flowers",
+      "title": "Buy food",
       "id": 2,
       "done": true
-    },
-    {
-      "title": "Get car washed",
-      "id": 3,
-      "done": false
     }
   ]
 }
