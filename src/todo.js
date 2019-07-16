@@ -10,11 +10,11 @@ export class ToDo extends Component {
     super(props);
     this.handleAddItem = this.handleAddItem.bind(this);
     this.handleDeleteItem = this.handleDeleteItem.bind(this);
+    this.handleMarkDone = this.handleMarkDone.bind(this);
     this.state = {
       items: []
     }
   }
-
   async getItems() {
     return JSON.parse(await rp.get(`${this.API_URL}/items`));
   }
@@ -38,12 +38,26 @@ export class ToDo extends Component {
       }
     });
   }
+  async markDone(id) {
+    if (id) {
+      await rp.patch({ url: `${this.API_URL}/items/${id}`, body: { done: true }, json: true });
+      this.setState({ items: await this.getItems() });
+    }
+  }
+  handleMarkDone() {
+    document.querySelectorAll('input[type=checkbox]').forEach(el => {
+      if (el.checked) {
+        this.markDone(el.dataset.key);
+      }
+    });
+  }
   async componentDidMount() {
     const items = await this.getItems();
     this.setState({ items: items });
 
   }
   render() {
+    this.markDone(2);
     if (this.state.items.length > 0) {
       const titleClasses = ['todo-title'];
       return (
@@ -53,7 +67,7 @@ export class ToDo extends Component {
               <h2>Actions</h2>
               <ul id="actions">
                 <li><input type="text" id="add-title" /><button type="button" className="btn-sm btn-info" onClick={this.handleAddItem}>Add</button></li>
-                <li><button type="button" className="btn-sm btn-success">Mark Done</button></li>
+                <li><button type="button" className="btn-sm btn-success" onClick={this.handleMarkDone}>Mark Done</button></li>
                 <li><button type="button" className="btn-sm btn-secondary">Mark Undone</button></li>
                 <li><button type="button" className="btn-sm btn-danger" onClick={this.handleDeleteItem}>Delete</button></li>
               </ul>
