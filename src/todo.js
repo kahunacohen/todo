@@ -90,10 +90,19 @@ export class ToDo extends Component {
           <div className="col col-md-3">
             <h2>Actions</h2>
             <ul id="actions">
-              <li><input type="text" id="add-title" /><button type="button" className="btn-sm btn-info" onClick={this.handleAddItem}>Add</button></li>
-              <li><button type="button" className="btn-sm btn-success" onClick={this.handleMarkDone}>Mark Done</button></li>
-              <li><button type="button" className="btn-sm btn-secondary" onClick={this.handleMarkUndone}>Mark Undone</button></li>
-              <li><button type="button" className="btn-sm btn-danger" onClick={this.handleDeleteItem}>Delete</button></li>
+              <li>
+                <input type="text" id="add-title" />
+                <button type="button" className="btn-sm btn-info" onClick={this.handleAddItem}>Add</button>
+              </li>
+              <li>
+                <button type="button" className="btn-sm btn-success" onClick={this.handleMarkDone}>Mark Done</button>
+              </li>
+              <li>
+                <button type="button" className="btn-sm btn-secondary" onClick={this.handleMarkUndone}>Mark Undone</button>
+              </li>
+              <li>
+                <button type="button" className="btn-sm btn-danger" onClick={this.handleDeleteItem}>Delete</button>
+              </li>
             </ul>
           </div>
           <div className="col col-md-9">
