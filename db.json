@@ -3,12 +3,12 @@
     {
       "title": "buy stuff",
       "id": 1,
-      "done": true
+      "done": false
     },
     {
-      "title": "b",
+      "title": "dsfsd",
       "id": 2,
-      "done": true
+      "done": false
     }
   ]
 }

@@ -9,7 +9,6 @@ export class ToDo extends Component {
 
   constructor(props) {
     super(props);
-    this.api = new API();
     this.addItemInput = null;
     this.setAddInput = this.setAddInput.bind(this);
     this.itemCheckboxes = [];
@@ -22,6 +21,7 @@ export class ToDo extends Component {
     this.handleDeleteItem = this.handleDeleteItem.bind(this);
     this.handleMarkDone = this.handleMarkDone.bind(this);
     this.handleMarkUndone = this.handleMarkUndone.bind(this);
+    this.api = new API();
   }
   setAddInput(el) {
     this.addItemInput = el;
@@ -35,7 +35,7 @@ export class ToDo extends Component {
    * @param {Function} cb - Callback function which takes the item ID as a parameter. 
    * @returns {Array} - An array of item IDs acted upon.
    */
-  setItems(cb) {
+  async setItems(cb) {
     let ret = [];
     this.itemCheckboxes.forEach(checkbox => {
       if (checkbox && checkbox.checked) {
@@ -47,11 +47,12 @@ export class ToDo extends Component {
     return ret;
   }
   async updateItemState() {
+    //console.log(await this.api.getItems());
     this.setState({ items: await this.api.getItems() });
   }
   async handleAddItem() {
     const addInp = this.addItemInput;
-    await this.addItem(addInp.value);
+    await this.api.addItem(addInp.value);
     addInp.value = '';
     this.updateItemState();
   }
@@ -60,11 +61,11 @@ export class ToDo extends Component {
     this.updateItemState();
   }
   async handleMarkDone() {
-    this.setItems(this.api.markDone);
+    await this.setItems(this.api.setDone);
     this.updateItemState();
   }
   async handleMarkUndone() {
-    this.setItems(this.api.markUndone);
+    await this.setItems(this.api.setUndone);
     this.updateItemState();
   }
   async componentDidMount() {
