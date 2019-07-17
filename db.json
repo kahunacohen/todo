@@ -1,3 +1,14 @@
 {
-  "items": []
+  "items": [
+    {
+      "title": "buy stuff",
+      "id": 1,
+      "done": true
+    },
+    {
+      "title": "b",
+      "id": 2,
+      "done": true
+    }
+  ]
 }

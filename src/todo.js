@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import rp from 'request-promise-native'
 
 import Actions from './actions';
+import TodoList from './todo-list';
 
 
 export class ToDo extends Component {
@@ -71,12 +72,14 @@ export class ToDo extends Component {
     this.setItems(this.deleteItem);
   }
   async markDone(id) {
+    console.log(id);
     if (id) {
       await rp.patch({ url: `${this.API_URL}/items/${id}`, body: { done: true }, json: true });
       this.setState({ items: await this.getItems() });
     }
   }
   handleMarkDone() {
+    console.log('here')
     this.setItems(this.markDone);
   }
   async markUndone(id) {
@@ -93,7 +96,6 @@ export class ToDo extends Component {
     this.setState({ items: items });
   }
   render() {
-    const titleClasses = ['todo-title'];
     return (
       <div className="container">
         <div className="row">
@@ -103,29 +105,12 @@ export class ToDo extends Component {
               handleAddItem={this.handleAddItem}
               handleMarkDone={this.handleMarkDone}
               handleMarkUndone={this.handleMarkUndone}
-              handleDeleteItem={this.handleDeleteItem}
-            />
+              handleDeleteItem={this.handleDeleteItem}/>
           </div>
           <div className="col col-md-9">
-            <h2>To Do List</h2>
-            <ul className="list-group form-check">
-              {this.state.items.length > 0 ?
-                this.state.items.map(item => {
-                  let doneBadge;
-                  if (item.done) {
-                    titleClasses.push('done');
-                    doneBadge = <span className="badge badge-success">Done</span>;
-                  } else {
-                    titleClasses.push('to-do');
-                    doneBadge = null;
-                  }
-                  return <li key={item.id} className="list-group-item">
-                          <input ref={this.setItemCheckboxesRef} data-key={item.id} className="form-check-input" type="checkbox" />
-                          <span className={titleClasses.join(' ')}>{item.title}</span>{doneBadge}
-                        </li>;
-                })
-                : <div className="alert alert-warning" role="alert">No items yet...</div>}
-            </ul>
+            <TodoList
+              items={this.state.items}
+              setItemCheckboxesRef={this.setItemCheckboxesRef}/>
           </div>
         </div>
       </div>
