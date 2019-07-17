@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
-import rp from 'request-promise-native'
 
+import API from './api';
 import Actions from './actions';
 import TodoList from './todo-list';
 
 
 export class ToDo extends Component {
-  API_URL = 'http://localhost:3001';
 
   constructor(props) {
     super(props);
+    this.api = new API();
     this.addItemInput = null;
     this.setAddInput = this.setAddInput.bind(this);
     this.itemCheckboxes = [];
@@ -46,53 +46,29 @@ export class ToDo extends Component {
     });
     return ret;
   }
-
-  /**
-   * Gets the list of TODO items.
-   */
-  async getItems() {
-    return JSON.parse(await rp.get(`${this.API_URL}/items`));
-  }
-  async addItem(title) {
-    if (title) {
-      await rp.post({ url: `${this.API_URL}/items`, body: { title: title }, json: true });
-      this.setState({ items: await this.getItems() });
-    }
+  async updateItemState() {
+    this.setState({ items: await this.api.getItems() });
   }
   async handleAddItem() {
     const addInp = this.addItemInput;
     await this.addItem(addInp.value);
     addInp.value = '';
+    this.updateItemState();
   }
-  async deleteItem(id) {
-    await rp.delete(`${this.API_URL}/items/${id}`);
-    this.setState({ items: await this.getItems() });
+  async handleDeleteItem(e) {
+    this.setItems(this.api.deleteItem);
+    this.updateItemState();
   }
-  handleDeleteItem(e) {
-    this.setItems(this.deleteItem);
+  async handleMarkDone() {
+    this.setItems(this.api.markDone);
+    this.updateItemState();
   }
-  async markDone(id) {
-    console.log(id);
-    if (id) {
-      await rp.patch({ url: `${this.API_URL}/items/${id}`, body: { done: true }, json: true });
-      this.setState({ items: await this.getItems() });
-    }
-  }
-  handleMarkDone() {
-    console.log('here')
-    this.setItems(this.markDone);
-  }
-  async markUndone(id) {
-    if (id) {
-      await rp.patch({ url: `${this.API_URL}/items/${id}`, body: { done: false }, json: true });
-      this.setState({ items: await this.getItems() });
-    }
-  }
-  handleMarkUndone() {
-    this.setItems(this.markUndone);
+  async handleMarkUndone() {
+    this.setItems(this.api.markUndone);
+    this.updateItemState();
   }
   async componentDidMount() {
-    const items = await this.getItems();
+    const items = await this.api.getItems();
     this.setState({ items: items });
   }
   render() {
