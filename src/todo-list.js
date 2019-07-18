@@ -1,5 +1,7 @@
 import React from 'react';
 
+import Item from './item';
+
 
 export default class TodoList extends React.Component {
   titleClasses = ['todo-title'];
@@ -8,21 +10,12 @@ export default class TodoList extends React.Component {
       <ul className="list-group form-check">
         {this.props.items.length > 0 ?
           this.props.items.map(item => {
-            let doneBadge;
-            if (item.done) {
-              this.titleClasses.push('done');
-              doneBadge = <span className="badge badge-success">Done</span>;
-            } else {
-              this.titleClasses.push('to-do');
-              doneBadge = null;
-            }
-            return <li key={item.id} className="list-group-item">
-              <input ref={this.props.setItemCheckboxesRef}
-                data-key={item.id}
-                className="form-check-input"
-                type="checkbox" />
-              <span className={this.titleClasses.join(' ')}>{item.title}</span>{doneBadge}
-            </li>;
+            return <Item 
+              key={item.id}
+              setItemCheckboxesRef={this.props.setItemCheckboxesRef}
+              title={item.title}
+              done={item.done} 
+              id={item.id}/>
           })
           : <div className="alert alert-warning" role="alert">No items yet...</div>}
       </ul></div>);

@@ -36,8 +36,10 @@ export class ToDo extends Component {
   async setItems(cb) {
     let ret = [];
     let promises = [];
+    console.log(this.itemCheckboxes)
     this.itemCheckboxes.forEach(async checkbox => {
       if (checkbox && checkbox.checked) {
+        console.log(checkbox)
         promises.push(cb.call(this, checkbox.dataset.key));
         checkbox.checked = false;
         ret.push(parseInt(checkbox.dataset.key));
@@ -56,6 +58,7 @@ export class ToDo extends Component {
     this.updateItems();
   }
   async handleDeleteItem() {
+    console.log('delete')
     await this.setItems(deleteItem);
     this.updateItems();
   }
