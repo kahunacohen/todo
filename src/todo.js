@@ -1,14 +1,11 @@
 import React, { Component } from 'react';
-import rp from 'request-promise-native'
 
 import Actions from './actions';
 import TodoList from './todo-list';
-import {addItem, deleteItem, getItems} from './api';
+import {addItem, deleteItem, getItems, markDone, markUndone} from './api';
 
 
 export class ToDo extends Component {
-  API_URL = 'http://localhost:3001';
-
   constructor(props) {
     super(props);
     this.addItemInput = null;
@@ -30,7 +27,6 @@ export class ToDo extends Component {
   setItemCheckboxesRef(el) {
     this.itemCheckboxes.push(el);
   }
-
   /**
    * Acts on all checked checkboxes.
    * @param {Function} cb - Callback function which takes the item ID as a parameter. 
@@ -49,7 +45,6 @@ export class ToDo extends Component {
     await Promise.all(promises);
     return ret;
   }
-
   async handleAddItem() {
     const addInp = this.addItemInput;
     await addItem(addInp.value);
@@ -60,25 +55,13 @@ export class ToDo extends Component {
     await this.setItems(deleteItem);
     this.setState({ items: await getItems() });
   }
-  async markDone(id) {
-    console.log(id);
-    if (id) {
-      await rp.patch({ url: `${this.API_URL}/items/${id}`, body: { done: true }, json: true });
-      this.setState({ items: await getItems() });
-    }
+  async handleMarkDone() {
+    await this.setItems(markDone);
+    this.setState({ items: await getItems() });
   }
-  handleMarkDone() {
-    console.log('here')
-    this.setItems(this.markDone);
-  }
-  async markUndone(id) {
-    if (id) {
-      await rp.patch({ url: `${this.API_URL}/items/${id}`, body: { done: false }, json: true });
-      this.setState({ items: await getItems() });
-    }
-  }
-  handleMarkUndone() {
-    this.setItems(this.markUndone);
+  async handleMarkUndone() {
+    await this.setItems(markUndone);
+    this.setState({ items: await getItems() });
   }
   async componentDidMount() {
     const items = await getItems();
