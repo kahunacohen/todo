@@ -3,6 +3,7 @@ import rp from 'request-promise-native'
 
 import Actions from './actions';
 import TodoList from './todo-list';
+import {addItem, deleteItem, getItems} from './api';
 
 
 export class ToDo extends Component {
@@ -35,47 +36,35 @@ export class ToDo extends Component {
    * @param {Function} cb - Callback function which takes the item ID as a parameter. 
    * @returns {Array} - An array of item IDs acted upon.
    */
-  setItems(cb) {
+  async setItems(cb) {
     let ret = [];
-    this.itemCheckboxes.forEach(checkbox => {
+    let promises = [];
+    this.itemCheckboxes.forEach(async checkbox => {
       if (checkbox && checkbox.checked) {
-        cb.call(this, checkbox.dataset.key);
+        promises.push(cb.call(this, checkbox.dataset.key));
         checkbox.checked = false;
         ret.push(parseInt(checkbox.dataset.key));
       }
     });
+    await Promise.all(promises);
     return ret;
   }
 
-  /**
-   * Gets the list of TODO items.
-   */
-  async getItems() {
-    return JSON.parse(await rp.get(`${this.API_URL}/items`));
-  }
-  async addItem(title) {
-    if (title) {
-      await rp.post({ url: `${this.API_URL}/items`, body: { title: title }, json: true });
-      this.setState({ items: await this.getItems() });
-    }
-  }
   async handleAddItem() {
     const addInp = this.addItemInput;
-    await this.addItem(addInp.value);
+    await addItem(addInp.value);
     addInp.value = '';
+    this.setState({ items: await getItems() });
   }
-  async deleteItem(id) {
-    await rp.delete(`${this.API_URL}/items/${id}`);
-    this.setState({ items: await this.getItems() });
-  }
-  handleDeleteItem(e) {
-    this.setItems(this.deleteItem);
+  async handleDeleteItem() {
+    await this.setItems(deleteItem);
+    this.setState({ items: await getItems() });
   }
   async markDone(id) {
     console.log(id);
     if (id) {
       await rp.patch({ url: `${this.API_URL}/items/${id}`, body: { done: true }, json: true });
-      this.setState({ items: await this.getItems() });
+      this.setState({ items: await getItems() });
     }
   }
   handleMarkDone() {
@@ -85,14 +74,14 @@ export class ToDo extends Component {
   async markUndone(id) {
     if (id) {
       await rp.patch({ url: `${this.API_URL}/items/${id}`, body: { done: false }, json: true });
-      this.setState({ items: await this.getItems() });
+      this.setState({ items: await getItems() });
     }
   }
   handleMarkUndone() {
     this.setItems(this.markUndone);
   }
   async componentDidMount() {
-    const items = await this.getItems();
+    const items = await getItems();
     this.setState({ items: items });
   }
   render() {
