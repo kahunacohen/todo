@@ -16,11 +16,12 @@ export class ToDo extends Component {
     }
     this.setItemCheckboxesRef = this.setItemCheckboxesRef.bind(this);
     this.setItems = this.setItems.bind(this);
-    this.handleAddItem = this.handleAddItem.bind(this);
+    this.handleAddItem = this.handleAddItem.bind(this)
     this.handleDeleteItem = this.handleDeleteItem.bind(this);
     this.handleMarkDone = this.handleMarkDone.bind(this);
     this.handleMarkUndone = this.handleMarkUndone.bind(this);
   }
+
   setAddInput(el) {
     this.addItemInput = el;
   }
@@ -45,23 +46,26 @@ export class ToDo extends Component {
     await Promise.all(promises);
     return ret;
   }
+  async updateItems() {
+    this.setState({ items: await getItems() });
+  }
   async handleAddItem() {
     const addInp = this.addItemInput;
     await addItem(addInp.value);
     addInp.value = '';
-    this.setState({ items: await getItems() });
+    this.updateItems();
   }
   async handleDeleteItem() {
     await this.setItems(deleteItem);
-    this.setState({ items: await getItems() });
+    this.updateItems();
   }
   async handleMarkDone() {
     await this.setItems(markDone);
-    this.setState({ items: await getItems() });
+    this.updateItems();
   }
   async handleMarkUndone() {
     await this.setItems(markUndone);
-    this.setState({ items: await getItems() });
+    this.updateItems();
   }
   async componentDidMount() {
     const items = await getItems();
