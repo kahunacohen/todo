@@ -39,7 +39,6 @@ export class ToDo extends Component {
     console.log(this.itemCheckboxes)
     this.itemCheckboxes.forEach(async checkbox => {
       if (checkbox && checkbox.checked) {
-        console.log(checkbox)
         promises.push(cb.call(this, checkbox.dataset.key));
         checkbox.checked = false;
         ret.push(parseInt(checkbox.dataset.key));
