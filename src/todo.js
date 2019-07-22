@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 
 import Actions from "./actions";
-import Item from "./item";
+import ItemList from './item-list';
+
 import { addItem, deleteItem, getItems, markDone, markUndone } from "./api";
 
 export class ToDo extends Component {
@@ -71,7 +72,6 @@ export class ToDo extends Component {
     this.setState({ items: items });
   }
   render() {
-    const items = this.state.items;
     return (
       <div className="container">
         <div className="row">
@@ -85,28 +85,9 @@ export class ToDo extends Component {
             />
           </div>
           <div className="col col-md-9">
-            <div>
-              <h2>To Do List</h2>
-              <ul className="list-group form-check">
-                {items.length > 0 ? (
-                  this.state.items.map(item => {
-                    return (
-                      <Item
-                        key={item.id}
-                        setItemCheckboxesRef={this.setItemCheckboxesRef}
-                        title={item.title}
-                        done={item.done}
-                        id={item.id}
-                      />
-                    );
-                  })
-                ) : (
-                  <div className="alert alert-warning" role="alert">
-                    No items yet...
-                  </div>
-                )}
-              </ul>
-            </div>
+            <ItemList 
+              items={this.state.items}
+              setItemCheckboxesRef={this.setItemCheckboxesRef}/>
           </div>
         </div>
       </div>

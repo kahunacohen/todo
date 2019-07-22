@@ -1,3 +1,8 @@
 {
-  "items": []
+  "items": [
+    {
+      "title": "bar",
+      "id": 1
+    }
+  ]
 }
