@@ -14,6 +14,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "coverage": "npm test -- --coverage --watchAll=false",
     "eject": "react-scripts eject",
     "mock_server": "json-server --watch ./db.json --port 3001",
     "prettier": "prettier --write src/**/*.js"
@@ -35,5 +36,12 @@
   },
   "devDependencies": {
     "prettier": "^1.18.2"
+  },
+  "jest": {
+    "collectCoverageFrom": [
+      "./src/*.js",
+      "!./src/serviceWorker.js"
+    ],
+    "coverageReporters": ["text", "html"]
   }
 }
