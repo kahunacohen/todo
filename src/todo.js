@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 
 import Actions from "./actions";
-import ItemList from './item-list';
+import ItemList from "./item-list";
 
 import { addItem, deleteItem, getItems, markDone, markUndone } from "./api";
 
@@ -85,9 +85,10 @@ export class ToDo extends Component {
             />
           </div>
           <div className="col col-md-9">
-            <ItemList 
+            <ItemList
               items={this.state.items}
-              setItemCheckboxesRef={this.setItemCheckboxesRef}/>
+              setItemCheckboxesRef={this.setItemCheckboxesRef}
+            />
           </div>
         </div>
       </div>
