@@ -50,7 +50,7 @@ export default class ToDo extends Component {
     this.setState({ items: await this.getItems() });
   }
   async getItems() {
-    console.log('here')
+    console.log("here");
     return getItems();
   }
   async handleAddItem() {

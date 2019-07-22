@@ -21,7 +21,7 @@ export default class ItemList extends React.Component {
               );
             })
           ) : (
-            <div className="alert alert-warning" role="alert">
+            <div id="no-items" className="alert alert-warning" role="alert">
               No items yet...
             </div>
           )}
