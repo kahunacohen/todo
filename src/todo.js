@@ -5,7 +5,7 @@ import ItemList from "./item-list";
 
 import { addItem, deleteItem, getItems, markDone, markUndone } from "./api";
 
-export class ToDo extends Component {
+export default class ToDo extends Component {
   constructor(props) {
     super(props);
     this.addItemInput = null;
@@ -47,7 +47,11 @@ export class ToDo extends Component {
     return ret;
   }
   async updateItems() {
-    this.setState({ items: await getItems() });
+    this.setState({ items: await this.getItems() });
+  }
+  async getItems() {
+    console.log('here')
+    return getItems();
   }
   async handleAddItem() {
     const addInp = this.addItemInput;
@@ -68,7 +72,7 @@ export class ToDo extends Component {
     this.updateItems();
   }
   async componentDidMount() {
-    const items = await getItems();
+    const items = await this.getItems();
     this.setState({ items: items });
   }
   render() {
