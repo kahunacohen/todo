@@ -1,9 +1,8 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 
-import Actions from './actions';
-import Item from './item';
-import { addItem, deleteItem, getItems, markDone, markUndone } from './api';
-
+import Actions from "./actions";
+import Item from "./item";
+import { addItem, deleteItem, getItems, markDone, markUndone } from "./api";
 
 export class ToDo extends Component {
   constructor(props) {
@@ -13,10 +12,10 @@ export class ToDo extends Component {
     this.itemCheckboxes = [];
     this.state = {
       items: []
-    }
+    };
     this.setItemCheckboxesRef = this.setItemCheckboxesRef.bind(this);
     this.setItems = this.setItems.bind(this);
-    this.handleAddItem = this.handleAddItem.bind(this)
+    this.handleAddItem = this.handleAddItem.bind(this);
     this.handleDeleteItem = this.handleDeleteItem.bind(this);
     this.handleMarkDone = this.handleMarkDone.bind(this);
     this.handleMarkUndone = this.handleMarkUndone.bind(this);
@@ -30,7 +29,7 @@ export class ToDo extends Component {
   }
   /**
    * Acts on all checked checkboxes.
-   * @param {Function} cb - Callback function which takes the item ID as a parameter. 
+   * @param {Function} cb - Callback function which takes the item ID as a parameter.
    * @returns {Array} - An array of item IDs acted upon.
    */
   async setItems(cb) {
@@ -52,7 +51,7 @@ export class ToDo extends Component {
   async handleAddItem() {
     const addInp = this.addItemInput;
     await addItem(addInp.value);
-    addInp.value = '';
+    addInp.value = "";
     this.updateItems();
   }
   async handleDeleteItem() {
@@ -82,26 +81,35 @@ export class ToDo extends Component {
               handleAddItem={this.handleAddItem}
               handleMarkDone={this.handleMarkDone}
               handleMarkUndone={this.handleMarkUndone}
-              handleDeleteItem={this.handleDeleteItem} />
+              handleDeleteItem={this.handleDeleteItem}
+            />
           </div>
           <div className="col col-md-9">
-            <div><h2>To Do List</h2>
+            <div>
+              <h2>To Do List</h2>
               <ul className="list-group form-check">
-                {items.length > 0 ?
+                {items.length > 0 ? (
                   this.state.items.map(item => {
-                    return <Item
-                      key={item.id}
-                      setItemCheckboxesRef={this.setItemCheckboxesRef}
-                      title={item.title}
-                      done={item.done}
-                      id={item.id} />
+                    return (
+                      <Item
+                        key={item.id}
+                        setItemCheckboxesRef={this.setItemCheckboxesRef}
+                        title={item.title}
+                        done={item.done}
+                        id={item.id}
+                      />
+                    );
                   })
-                  : <div className="alert alert-warning" role="alert">No items yet...</div>}
-              </ul></div>
+                ) : (
+                  <div className="alert alert-warning" role="alert">
+                    No items yet...
+                  </div>
+                )}
+              </ul>
+            </div>
           </div>
         </div>
       </div>
     );
-
   }
 }

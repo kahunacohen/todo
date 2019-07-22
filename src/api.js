@@ -1,7 +1,6 @@
-import rp from 'request-promise-native'
+import rp from "request-promise-native";
 
-
-const API_URL = 'http://localhost:3001';
+const API_URL = "http://localhost:3001";
 
 export async function getItems() {
   return JSON.parse(await rp.get(`${API_URL}/items`));
@@ -9,20 +8,32 @@ export async function getItems() {
 
 export async function addItem(title) {
   if (title) {
-    await rp.post({ url: `${API_URL}/items`, body: { title: title }, json: true });
+    await rp.post({
+      url: `${API_URL}/items`,
+      body: { title: title },
+      json: true
+    });
   }
 }
 export async function deleteItem(id) {
-  console.log('delete api')
+  console.log("delete api");
   await rp.delete(`${API_URL}/items/${id}`);
 }
 export async function markDone(id) {
   if (id) {
-    await rp.patch({ url: `${API_URL}/items/${id}`, body: { done: true }, json: true });
+    await rp.patch({
+      url: `${API_URL}/items/${id}`,
+      body: { done: true },
+      json: true
+    });
   }
 }
 export async function markUndone(id) {
   if (id) {
-    await rp.patch({ url: `${API_URL}/items/${id}`, body: { done: false }, json: true });
+    await rp.patch({
+      url: `${API_URL}/items/${id}`,
+      body: { done: false },
+      json: true
+    });
   }
 }
