@@ -11,6 +11,7 @@ describe('Item', () => {
   it('renders as a list item', () => {
     const item = ReactDOM.render(<Item id="1" key="1"/>, div);
     const li = ReactDOM.findDOMNode(item);
+    expect(li.tagName).toEqual('LI');
     expect(li.getAttribute('class')).toEqual('list-group-item');
     ReactDOM.unmountComponentAtNode(div);
   });
@@ -29,6 +30,12 @@ describe('Item', () => {
     expect(badge.tagName).toEqual('SPAN');
     expect(badge.getAttribute('class')).toEqual('badge badge-success');
     expect(badge.textContent).toEqual('Done')
+    ReactDOM.unmountComponentAtNode(div);
+  });
+  it('does not render a done badge if the item is not done', () => {
+    const item = ReactDOM.render(<Item id="1" key="1"/>, div);
+    const badge = ReactDOM.findDOMNode(item).children[2];
+    expect(badge).toBe(undefined);
     ReactDOM.unmountComponentAtNode(div);
   });
 });
