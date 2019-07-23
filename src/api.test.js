@@ -8,21 +8,12 @@ describe("api", () => {
     sinon.restore();
   });
   describe("getItems", () => {
-    beforeEach(() => {
+    it("returns a promise with valid item JSON", async done => {
       sinon.replace(
         rp,
         "get",
-        sinon.fake(async () => {
-          return `[
-          {
-            "title": "foo",
-            "id": 1
-          }
-        ]`;
-        })
+        sinon.fake(async () => '[{"title": "foo","id": 1}]')
       );
-    });
-    it("returns a promise with valid item JSON", async done => {
       const items = await getItems();
       expect(items[0].title === "foo" && items[0].id === 1).toBe(true);
       done();
@@ -110,6 +101,4 @@ describe("api", () => {
       done();
     });
   });
-
-  
 });
