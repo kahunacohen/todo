@@ -16,8 +16,9 @@ export async function addItem(title) {
   }
 }
 export async function deleteItem(id) {
-  console.log("delete api");
-  await rp.delete(`${API_URL}/items/${id}`);
+  if (id) {
+    await rp.delete(`${API_URL}/items/${id}`);
+  }
 }
 export async function markDone(id) {
   if (id) {
