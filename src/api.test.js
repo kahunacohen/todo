@@ -1,7 +1,7 @@
 import sinon from "sinon";
 import rp from "request-promise-native";
 
-import { addItem, deleteItem, getItems } from "./api";
+import { addItem, deleteItem, getItems, markDone, markUndone } from "./api";
 
 describe("api", () => {
   afterEach(() => {
@@ -66,4 +66,50 @@ describe("api", () => {
       done();
     });
   });
+  describe("markDone", () => {
+    it("Doesn't make request if no id is passed", async done => {
+      const fakePatch = sinon.fake();
+      sinon.replace(rp, "patch", fakePatch);
+      await markDone();
+      expect(fakePatch.notCalled).toBe(true);
+      done();
+    });
+    it("Makes patch request when id is defined", async done => {
+      const fakePatch = sinon.fake();
+      sinon.replace(rp, "patch", fakePatch);
+      await markDone(1);
+      expect(
+        fakePatch.calledOnceWithExactly({
+          url: "http://localhost:3001/items/1",
+          body: { done: true },
+          json: true
+        })
+      ).toBe(true);
+      done();
+    });
+  });
+  describe("marUndone", () => {
+    it("Doesn't make request if no id is passed", async done => {
+      const fakePatch = sinon.fake();
+      sinon.replace(rp, "patch", fakePatch);
+      await markUndone();
+      expect(fakePatch.notCalled).toBe(true);
+      done();
+    });
+    it("Makes patch request when id is defined", async done => {
+      const fakePatch = sinon.fake();
+      sinon.replace(rp, "patch", fakePatch);
+      await markUndone(1);
+      expect(
+        fakePatch.calledOnceWithExactly({
+          url: "http://localhost:3001/items/1",
+          body: { done: false },
+          json: true
+        })
+      ).toBe(true);
+      done();
+    });
+  });
+
+  
 });
