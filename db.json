@@ -1,3 +1,8 @@
 {
-  "items": []
+  "items": [
+    {
+      "title": "foo",
+      "id": 1
+    }
+  ]
 }
