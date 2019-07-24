@@ -3,6 +3,11 @@ import rp from "request-promise-native";
 const API_URL = "http://localhost:3001";
 
 async function getItems() {
+  try {
+    foo + BarProp;
+  } catch(e) {
+    console.log(e);
+  }
   return JSON.parse(await rp.get(`${API_URL}/items`));
 }
 
