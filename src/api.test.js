@@ -1,7 +1,8 @@
 import sinon from "sinon";
 import rp from "request-promise-native";
 
-import { addItem, deleteItem, getItems, markDone, markUndone } from "./api";
+import api from './api';
+
 
 describe("api", () => {
   afterEach(() => {
@@ -14,7 +15,7 @@ describe("api", () => {
         "get",
         sinon.fake(async () => '[{"title": "foo","id": 1}]')
       );
-      const items = await getItems();
+      const items = await api.getItems();
       expect(items[0].title === "foo" && items[0].id === 1).toBe(true);
       done();
     });
@@ -23,14 +24,14 @@ describe("api", () => {
     it("Doesn't make request if no title is passed", async done => {
       const fakePost = sinon.fake();
       sinon.replace(rp, "post", fakePost);
-      await addItem();
+      await api.addItem();
       expect(fakePost.notCalled).toBe(true);
       done();
     });
     it("Makes post request when title is defined", async done => {
       const fakePost = sinon.fake();
       sinon.replace(rp, "post", fakePost);
-      await addItem("Title");
+      await api.addItem("Title");
       expect(
         fakePost.calledOnceWithExactly({
           url: "http://localhost:3001/items",
@@ -45,14 +46,14 @@ describe("api", () => {
     it("Doesn't make request if no id is passed", async done => {
       const fakeDelete = sinon.fake();
       sinon.replace(rp, "delete", fakeDelete);
-      await deleteItem();
+      await api.deleteItem();
       expect(fakeDelete.notCalled).toBe(true);
       done();
     });
     it("Makes delete request when id is defined", async done => {
       const fakeDelete = sinon.fake();
       sinon.replace(rp, "delete", fakeDelete);
-      await deleteItem(1);
+      await api.deleteItem(1);
       expect(fakeDelete.calledOnce).toBe(true);
       done();
     });
@@ -61,14 +62,14 @@ describe("api", () => {
     it("Doesn't make request if no id is passed", async done => {
       const fakePatch = sinon.fake();
       sinon.replace(rp, "patch", fakePatch);
-      await markDone();
+      await api.markDone();
       expect(fakePatch.notCalled).toBe(true);
       done();
     });
     it("Makes patch request when id is defined", async done => {
       const fakePatch = sinon.fake();
       sinon.replace(rp, "patch", fakePatch);
-      await markDone(1);
+      await api.markDone(1);
       expect(
         fakePatch.calledOnceWithExactly({
           url: "http://localhost:3001/items/1",
@@ -83,14 +84,14 @@ describe("api", () => {
     it("Doesn't make request if no id is passed", async done => {
       const fakePatch = sinon.fake();
       sinon.replace(rp, "patch", fakePatch);
-      await markUndone();
+      await api.markUndone();
       expect(fakePatch.notCalled).toBe(true);
       done();
     });
     it("Makes patch request when id is defined", async done => {
       const fakePatch = sinon.fake();
       sinon.replace(rp, "patch", fakePatch);
-      await markUndone(1);
+      await api.markUndone(1);
       expect(
         fakePatch.calledOnceWithExactly({
           url: "http://localhost:3001/items/1",

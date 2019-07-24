@@ -8,9 +8,6 @@ describe("Todo", () => {
   let div;
   beforeEach(() => {
     div = document.createElement("div");
-  
-
-a
   });
   it("fudge", done => {
     const toDo = ReactDOM.render(<ToDo />, div);
