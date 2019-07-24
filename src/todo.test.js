@@ -1,4 +1,3 @@
-import api from "./api";
 import React from "react";
 import ReactDOM from "react-dom";
 import ToDo from "./todo";
@@ -9,15 +8,11 @@ describe("Todo", () => {
   let div;
   beforeEach(() => {
     div = document.createElement("div");
-    sinon.replace(
-      ToDo.prototype,
-      "getItems",
-      sinon.fake(async () => {
-        return [];
-      })
-    );
+  
+
+a
   });
-  it("it works", done => {
+  it("fudge", done => {
     const toDo = ReactDOM.render(<ToDo />, div);
     const ct = ReactDOM.findDOMNode(toDo);
     setTimeout(() => {

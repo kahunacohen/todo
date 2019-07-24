@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import Actions from "./actions";
 import ItemList from "./item-list";
 
-import { addItem, deleteItem, getItems, markDone, markUndone } from "./api";
+import api from "./api";
 
 export default class ToDo extends Component {
   constructor(props) {
@@ -50,25 +50,24 @@ export default class ToDo extends Component {
     this.setState({ items: await this.getItems() });
   }
   async getItems() {
-    console.log("here");
-    return getItems();
+    return api.getItems();
   }
   async handleAddItem() {
     const addInp = this.addItemInput;
-    await addItem(addInp.value);
+    await api.addItem(addInp.value);
     addInp.value = "";
     this.updateItems();
   }
   async handleDeleteItem() {
-    await this.setItems(deleteItem);
+    await this.setItems(api.deleteItem);
     this.updateItems();
   }
   async handleMarkDone() {
-    await this.setItems(markDone);
+    await this.setItems(api.markDone);
     this.updateItems();
   }
   async handleMarkUndone() {
-    await this.setItems(markUndone);
+    await this.setItems(api.markUndone);
     this.updateItems();
   }
   async componentDidMount() {

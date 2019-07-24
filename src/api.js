@@ -2,11 +2,11 @@ import rp from "request-promise-native";
 
 const API_URL = "http://localhost:3001";
 
-export async function getItems() {
+async function getItems() {
   return JSON.parse(await rp.get(`${API_URL}/items`));
 }
 
-export async function addItem(title) {
+async function addItem(title) {
   if (title) {
     await rp.post({
       url: `${API_URL}/items`,
@@ -15,12 +15,12 @@ export async function addItem(title) {
     });
   }
 }
-export async function deleteItem(id) {
+async function deleteItem(id) {
   if (id) {
     await rp.delete(`${API_URL}/items/${id}`);
   }
 }
-export async function markDone(id) {
+async function markDone(id) {
   if (id) {
     await rp.patch({
       url: `${API_URL}/items/${id}`,
@@ -29,7 +29,7 @@ export async function markDone(id) {
     });
   }
 }
-export async function markUndone(id) {
+async function markUndone(id) {
   if (id) {
     await rp.patch({
       url: `${API_URL}/items/${id}`,
@@ -38,3 +38,11 @@ export async function markUndone(id) {
     });
   }
 }
+
+export default {
+  getItems: getItems,
+  addItem: addItem,
+  deleteItem: deleteItem,
+  markDone: markDone,
+  markUndone: markUndone
+};
