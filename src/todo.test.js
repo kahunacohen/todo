@@ -8,10 +8,10 @@ import sinon from "sinon";
 describe("Todo", () => {
   let div;
   let fakeGetItems = items => {
-    const fake = () =>
+    const fake = sinon.fake(() =>
       new Promise(resolve => {
         resolve(items);
-      });
+      }));
     sinon.replace(
       api,
       "getItems",
@@ -20,7 +20,7 @@ describe("Todo", () => {
     return fake;
   };
   let fakeMarkDone = () => {
-    let fake = () => new Promise(resolve => { resolve(true); });
+    let fake = sinon.fake(() => { return new Promise(resolve => { resolve(true); }) });
     sinon.replace(api, 'markDone', fake);
     return fake;
   }
@@ -30,15 +30,27 @@ describe("Todo", () => {
   afterEach(() => {
     sinon.restore();
   });
-  it("G", done => {
+
+  it('loads items on render', async done => {
+    const getItemsAPICall = fakeGetItems([{ title: 'foo', id: 1 }]);
+    const { unmount } = render(<ToDo />);
+    setTimeout(() => {
+      expect(getItemsAPICall.calledOnce).toBe(true);
+      unmount();
+      done();
+    }, 250);
+  });
+
+  it("marks the item as done", async done => {
     fakeGetItems([{ title: 'foo', id: 1 }]);
-    fakeMarkDone();
-    const { getByTestId } = render(<ToDo />);
+    const markDoneApiCall = fakeMarkDone();
+    const { unmount, getByTestId } = render(<ToDo />);
     setTimeout(() => {
       fireEvent.click(getByTestId("checkbox-1"));
       fireEvent.click(getByTestId("mark-done"));
+      expect(markDoneApiCall.calledOnce).toBe(true);
+      unmount();
       done();
-      
-    }, 100);
+    }, 250);
   });
 });
