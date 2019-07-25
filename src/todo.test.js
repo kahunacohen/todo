@@ -2,6 +2,7 @@ import api from './api';
 import React from "react";
 import ReactDOM from "react-dom";
 import ToDo from "./todo";
+import {render, fireEvent} from '@testing-library/react';
 
 import sinon from "sinon";
 
@@ -15,13 +16,11 @@ describe("Todo", () => {
   afterEach(() => {
     sinon.restore();
   })
-  it("fudge", async done => {
-    const toDo = ReactDOM.render(<ToDo />, div);
-    const ct = ReactDOM.findDOMNode(toDo);
+  //https://github.com/testing-library/react-testing-library#the-problem
+  it("fudge", done => {
+    const {getByText} = render(<ToDo />);
     setTimeout(() => {
-      const itemCheckBox = ct.querySelector('input[data-key="1"]');
-      itemCheckBox.checked = true;
-      ReactDOM.unmountComponentAtNode(div);
+      getByText('foo');
       done();
     }, 100);
   });

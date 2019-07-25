@@ -18,6 +18,7 @@ export default class Actions extends React.Component {
           </li>
           <li>
             <button
+              id="mark-done"
               type="button"
               className="btn-sm btn-success"
               onClick={this.props.handleMarkDone}
