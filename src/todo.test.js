@@ -18,9 +18,9 @@ describe("Todo", () => {
   })
   //https://github.com/testing-library/react-testing-library#the-problem
   it("fudge", done => {
-    const {getByText} = render(<ToDo />);
+    const {getByTestId} = render(<ToDo />);
     setTimeout(() => {
-      getByText('foo');
+      fireEvent.click(getByTestId('checkbox-1'));
       done();
     }, 100);
   });

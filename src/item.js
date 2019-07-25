@@ -19,6 +19,7 @@ export default class Item extends React.Component {
         <input
           ref={this.props.setItemCheckboxesRef}
           data-key={this.props.id}
+          data-testid={`checkbox-${this.props.id}`}
           className="form-check-input"
           type="checkbox"
         />
