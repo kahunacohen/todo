@@ -9,7 +9,11 @@ export default class Item extends React.Component {
     let doneBadge;
     if (this.props.done) {
       this.titleClasses.push("done");
-      doneBadge = <span id="done-badge" className="badge badge-success">Done</span>;
+      doneBadge = (
+        <span id="done-badge" className="badge badge-success">
+          Done
+        </span>
+      );
     } else {
       this.titleClasses.push("to-do");
       doneBadge = null;

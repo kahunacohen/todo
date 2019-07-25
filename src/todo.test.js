@@ -1,31 +1,44 @@
-import api from './api';
+import api from "./api";
 import React from "react";
-import ReactDOM from "react-dom";
 import ToDo from "./todo";
-import {render, fireEvent} from '@testing-library/react';
+import { render, fireEvent } from "@testing-library/react";
 
 import sinon from "sinon";
 
-
 describe("Todo", () => {
   let div;
+  let fakeGetItems = items => {
+    const fake = () =>
+      new Promise(resolve => {
+        resolve(items);
+      });
+    sinon.replace(
+      api,
+      "getItems",
+      fake
+    );
+    return fake;
+  };
+  let fakeMarkDone = () => {
+    let fake = () => new Promise(resolve => { resolve(true); });
+    sinon.replace(api, 'markDone', fake);
+    return fake;
+  }
   beforeEach(() => {
     div = document.createElement("div");
-    sinon.replace(api, 'getItems', sinon.fake(() => [{ title: 'foo', id: 1 }]));
-    sinon.replace(api, 'markDone', sinon.fake(() => {
-      return new Promise(r => {r(true)});
-    }));
-
   });
   afterEach(() => {
     sinon.restore();
-  })
-  it("fudge", done => {
-    const {getByTestId} = render(<ToDo />);
+  });
+  it("G", done => {
+    fakeGetItems([{ title: 'foo', id: 1 }]);
+    fakeMarkDone();
+    const { getByTestId } = render(<ToDo />);
     setTimeout(() => {
-      fireEvent.click(getByTestId('checkbox-1'));
-      fireEvent.click(getByTestId('mark-done'));
+      fireEvent.click(getByTestId("checkbox-1"));
+      fireEvent.click(getByTestId("mark-done"));
       done();
+      
     }, 100);
   });
 });

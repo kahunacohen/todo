@@ -1,8 +1,7 @@
 import sinon from "sinon";
 import rp from "request-promise-native";
 
-import api from './api';
-
+import api from "./api";
 
 describe("api", () => {
   afterEach(() => {
