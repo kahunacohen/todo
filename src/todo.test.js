@@ -12,15 +12,19 @@ describe("Todo", () => {
   beforeEach(() => {
     div = document.createElement("div");
     sinon.replace(api, 'getItems', sinon.fake(() => [{ title: 'foo', id: 1 }]));
+    sinon.replace(api, 'markDone', sinon.fake(() => {
+      return new Promise(r => {r(true)});
+    }));
+
   });
   afterEach(() => {
     sinon.restore();
   })
-  //https://github.com/testing-library/react-testing-library#the-problem
   it("fudge", done => {
     const {getByTestId} = render(<ToDo />);
     setTimeout(() => {
       fireEvent.click(getByTestId('checkbox-1'));
+      fireEvent.click(getByTestId('mark-done'));
       done();
     }, 100);
   });
