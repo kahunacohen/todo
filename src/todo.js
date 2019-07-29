@@ -21,7 +21,21 @@ export default class ToDo extends Component {
     this.handleMarkDone = this.handleMarkDone.bind(this);
     this.handleMarkUndone = this.handleMarkUndone.bind(this);
   }
-
+  async getItems() {
+    return api.getItems();
+  }
+  async deleteItem(id) {
+    return api.deleteItem(id);
+  }
+  async addItem(title) {
+    return api.addItem(title);
+  }
+  async markDone(id) {
+    return api.markDone(id);
+  }
+  async markUndone(id) {
+    return api.markUndone(id);
+  }
   setAddInput(el) {
     this.addItemInput = el;
   }
@@ -49,25 +63,22 @@ export default class ToDo extends Component {
   async updateItems() {
     this.setState({ items: await this.getItems() });
   }
-  async getItems() {
-    return api.getItems();
-  }
   async handleAddItem() {
     const addInp = this.addItemInput;
-    await api.addItem(addInp.value);
+    await this.addItem(addInp.value);
     addInp.value = "";
     this.updateItems();
   }
   async handleDeleteItem() {
-    await this.setItems(api.deleteItem);
+    await this.setItems(this.deleteItem);
     this.updateItems();
   }
   async handleMarkDone() {
-    await this.setItems(api.markDone);
+    await this.setItems(this.markDone);
     this.updateItems();
   }
   async handleMarkUndone() {
-    await this.setItems(api.markUndone);
+    await this.setItems(this.markUndone);
     this.updateItems();
   }
   async componentDidMount() {
