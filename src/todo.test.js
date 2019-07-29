@@ -13,7 +13,7 @@ describe("Todo", () => {
         resolve(items);
       }));
     sinon.replace(
-      api,
+      ToDo.prototype,
       "getItems",
       fake
     );
@@ -21,7 +21,7 @@ describe("Todo", () => {
   };
   let fakeMarkDone = () => {
     let fake = sinon.fake(() => { return new Promise(resolve => { resolve(true); }) });
-    sinon.replace(api, 'markDone', fake);
+    sinon.replace(ToDo.prototype, 'markDone', fake);
     return fake;
   }
   beforeEach(() => {
@@ -30,7 +30,6 @@ describe("Todo", () => {
   afterEach(() => {
     sinon.restore();
   });
-
   it('loads items on render', async done => {
     const getItemsAPICall = fakeGetItems([{ title: 'foo', id: 1 }]);
     const { unmount } = render(<ToDo />);
