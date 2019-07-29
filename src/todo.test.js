@@ -30,6 +30,7 @@ describe("Todo", () => {
   afterEach(() => {
     sinon.restore();
   });
+  
   it('loads items on render', async done => {
     const getItemsAPICall = fakeGetItems([{ title: 'foo', id: 1 }]);
     const { unmount } = render(<ToDo />);
@@ -40,15 +41,22 @@ describe("Todo", () => {
     }, 250);
   });
   it("marks the item as done", async done => {
-    fakeGetItems([{ title: 'foo', id: 1 }]);
-    const markDoneApiCall = fakeMarkDone();
-    const { unmount, getByTestId } = render(<ToDo />);
+    var stub = sinon.stub();
+    stub.onCall(0).returns([{title: 'foo', id: 1}]);
+    stub.onCall(1).returns([{title: 'foo', id: 1, done: true}]);
+    sinon.replace(ToDo.prototype, 'getItems', stub);
+    fakeMarkDone();
+    const { debug, unmount, getByTestId } = render(<ToDo />);
     setTimeout(() => {
       fireEvent.click(getByTestId("checkbox-1"));
       fireEvent.click(getByTestId("mark-done"));
-      expect(markDoneApiCall.calledOnce).toBe(true);
-      unmount();
-      done();
+      setTimeout(() => {
+        expect(getByTestId('done-badge')).toBeDefined();
+        debug();
+        unmount();
+        done();
+      }, 250)
     }, 250);
+
   });
 });
