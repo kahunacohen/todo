@@ -40,7 +40,6 @@ describe("Todo", () => {
       done();
     }, 250);
   });
-
   it("marks the item as done", async done => {
     fakeGetItems([{ title: 'foo', id: 1 }]);
     const markDoneApiCall = fakeMarkDone();

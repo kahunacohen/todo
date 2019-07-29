@@ -1,13 +1,9 @@
 {
   "items": [
     {
-      "title": "foo",
+      "title": "bar",
       "id": 1,
       "done": true
-    },
-    {
-      "title": "basd",
-      "id": 2
     }
   ]
 }
