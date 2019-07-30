@@ -28,6 +28,7 @@ export default class Actions extends React.Component {
           </li>
           <li>
             <button
+              data-testid="mark-undone"
               type="button"
               className="btn-sm btn-secondary"
               onClick={this.props.handleMarkUndone}
