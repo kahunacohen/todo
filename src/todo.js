@@ -28,6 +28,7 @@ export default class ToDo extends Component {
     return api.deleteItem(id);
   }
   async addItem(title) {
+    console.log('call')
     return api.addItem(title);
   }
   async markDone(id) {
