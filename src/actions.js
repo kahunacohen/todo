@@ -7,7 +7,11 @@ export default class Actions extends React.Component {
         <h2>Actions</h2>
         <ul id="actions">
           <li>
-            <input data-testid="add-title" ref={this.props.setAddInput} type="text" />
+            <input
+              data-testid="add-title"
+              ref={this.props.setAddInput}
+              type="text"
+            />
             <button
               data-testid="add-btn"
               type="button"
