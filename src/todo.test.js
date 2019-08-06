@@ -64,7 +64,7 @@ describe("Todo", () => {
 
     // Stub out markDone to do nothing.
     sinon.replace(ToDo.prototype, "markDone", sinon.fake());
-    const { debug, unmount, getByTestId } = render(<ToDo />);
+    const { unmount, getByTestId } = render(<ToDo />);
     unmnt = unmount;
 
     // Wait till the first item is rendered, and tick its checkbox.
@@ -80,22 +80,40 @@ describe("Todo", () => {
   });
   it("handles marking items as undone", async done => {
     var getItemsStub = sinon.stub();
-    getItemsStub.onCall(0).returns([{ title: 'foo', id: 1, done: true }]);
-    getItemsStub.onCall(1).returns([{ title: 'foo', id: 1, done: false }]);
-    sinon.replace(ToDo.prototype, 'getItems', getItemsStub);
-    sinon.replace(ToDo.prototype, 'markUndone', sinon.fake());
-    const { debug, unmount, getByTestId, getByText, container } = render(<ToDo />);
+    getItemsStub.onCall(0).returns([{ title: "foo", id: 1, done: true }]);
+    getItemsStub.onCall(1).returns([{ title: "foo", id: 1, done: false }]);
+    sinon.replace(ToDo.prototype, "getItems", getItemsStub);
+    sinon.replace(ToDo.prototype, "markUndone", sinon.fake());
+    const { unmount, getByTestId, container } = render(<ToDo />);
     unmnt = unmount;
-    await wait(() => getByTestId('checkbox-1') && getByTestId('mark-undone'));
+    await wait(() => getByTestId("checkbox-1") && getByTestId("mark-undone"));
     fireEvent.click(getByTestId("checkbox-1"));
     fireEvent.click(getByTestId("mark-undone"));
     const mutation = await waitForDomChange({ container });
     // Search DOM mutation for the done span. It shouldn't be there.
     mutation.forEach(change => {
-      if(change.target.tagName === 'SPAN') {
-        expect(change.target.getAttribute('id')).not.toEqual('done-badge');
+      if (change.target.tagName === "SPAN") {
+        expect(change.target.getAttribute("id")).not.toEqual("done-badge");
       }
     });
+    done();
+  });
+  it("handles deleting items", async done => {
+    var getItemsStub = sinon.stub();
+    getItemsStub.onCall(0).returns([{ title: "foo", id: 1, done: true }]);
+    getItemsStub.onCall(1).returns([]);
+    sinon.replace(ToDo.prototype, "getItems", getItemsStub);
+    sinon.replace(ToDo.prototype, "deleteItem", sinon.fake());
+    const { unmount, getByTestId, getByText } = render(<ToDo />);
+    unmnt = unmount;
+
+    // Click the first item
+    await wait(() => fireEvent.click(getByTestId("checkbox-1")));
+
+    // Click the delete button and check that no items render.
+    fireEvent.click(getByTestId("delete"));
+    await wait(() => getByText("No items yet..."));
+    expect(getByText("No items yet...")).toBeDefined();
     done();
   });
 });

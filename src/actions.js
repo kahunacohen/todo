@@ -43,6 +43,7 @@ export default class Actions extends React.Component {
           </li>
           <li>
             <button
+              data-testid="delete"
               type="button"
               className="btn-sm btn-danger"
               onClick={this.props.handleDeleteItem}
