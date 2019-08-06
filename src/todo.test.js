@@ -78,32 +78,24 @@ describe("Todo", () => {
     expect(getByTestId("done-badge")).toBeDefined();
     done();
   });
-
-  // Clean this up:
-
-  // it("handles marking items as undone", async done => {
-  //   var stub = sinon.stub();
-  //   stub.onCall(0).returns([{ title: 'foo', id: 1, done: true }]);
-  //   stub.onCall(1).returns([{ title: 'foo', id: 1, done: false }]);
-  //   sinon.replace(ToDo.prototype, 'getItems', stub);
-  //   fakeMarkUndone();
-  //   const { debug, unmount, getByTestId, getByText, container } = render(<ToDo />);
-  //   unmnt = unmount;
-  //   setTimeout(() => {
-  //     fireEvent.click(getByTestId("checkbox-1"));
-  //     fireEvent.click(getByTestId("mark-undone"));
-  //     setTimeout(() => {
-  //       let doneBadgeFound;
-  //       try {
-  //         getByText(/^Done$/);
-  //         doneBadgeFound = true;
-  //       } catch (e) {
-  //         doneBadgeFound = false;
-  //       } finally {
-  //         expect(doneBadgeFound).toBe(false);
-  //         done();
-  //       }
-  //     }, 250)
-  //   }, 250);
-  // });
+  it("handles marking items as undone", async done => {
+    var getItemsStub = sinon.stub();
+    getItemsStub.onCall(0).returns([{ title: 'foo', id: 1, done: true }]);
+    getItemsStub.onCall(1).returns([{ title: 'foo', id: 1, done: false }]);
+    sinon.replace(ToDo.prototype, 'getItems', getItemsStub);
+    sinon.replace(ToDo.prototype, 'markUndone', sinon.fake());
+    const { debug, unmount, getByTestId, getByText, container } = render(<ToDo />);
+    unmnt = unmount;
+    await wait(() => getByTestId('checkbox-1') && getByTestId('mark-undone'));
+    fireEvent.click(getByTestId("checkbox-1"));
+    fireEvent.click(getByTestId("mark-undone"));
+    const mutation = await waitForDomChange({ container });
+    // Search DOM mutation for the done span. It shouldn't be there.
+    mutation.forEach(change => {
+      if(change.target.tagName === 'SPAN') {
+        expect(change.target.getAttribute('id')).not.toEqual('done-badge');
+      }
+    });
+    done();
+  });
 });
